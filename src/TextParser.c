@@ -13,16 +13,16 @@ ReturnCodes ParseTextFromFile(const char* filename, HashTable* ht) {
     if (buffer == NULL) {
         fprintf(stderr, RED("Memory error in ParseTextFromFile!\n"));
         fclose(file);
-        return FILE_ERROR;
+        return MEMORY_ERROR;
     }
 
-    //long long cnt = 0;
+    int cnt = 0;
     while (fscanf(file, "%255s", buffer) == 1) {
         //printf("%s\n", buffer);
-        //cnt++;
+        cnt++;
         HashTableInsert(ht, buffer);
     }
-    //printf(GREEN("%lld\n"), cnt);
+    printf(GREEN("%d\n"), cnt);
 
     FREE(buffer);
     fclose(file);

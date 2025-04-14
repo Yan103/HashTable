@@ -4,7 +4,7 @@
 #include "Tools.h"
 #include "string.h"
 
-#define TABLE_SIZE  1000009
+#define TABLE_SIZE  100009 //* it is too big!      ????
 #define LOAD_FACTOR 0.75
 
 typedef const char* KeyType;
