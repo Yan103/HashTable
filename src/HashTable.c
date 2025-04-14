@@ -2,7 +2,9 @@
 
 Node* HashTableFind(Node* head, KeyType find_key) {
     //printf("in\n");
+    //printf("!\n");
     while (head != NULL) {
+        //printf("%s\n", head->key);
         if (strcmp(head->key, find_key) == 0) return head;
         head = head->next;
     }
@@ -30,10 +32,15 @@ ReturnCodes HashTableInsert(HashTable* ht, KeyType new_key) {
         return SUCCESS;
     }   
 
+    char* key_copy = strdup(new_key); 
+    if (key_copy == NULL) {
+        return MEMORY_ERROR;
+    }
+
     Node* new_node = (Node*) calloc(1, sizeof(Node));
     assert(new_node != NULL && "Memory error in HashTableInsert!\n");
 
-    new_node->key       = new_key;
+    new_node->key       = key_copy;
     new_node->frequency = 1; 
 
     new_node->next = ht->table[hash];
@@ -80,7 +87,7 @@ ReturnCodes HashTableDtor(HashTable* ht) {
         while (curr != NULL) {
             tmp = curr;
             curr = curr->next;
-            tmp->key = NULL; 
+            free((void*)tmp->key);  
             FREE(tmp);
         }
         ht->table[i] = NULL;
