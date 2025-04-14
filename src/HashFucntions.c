@@ -59,12 +59,13 @@ size_t GetHashDJB2(KeyType key) {
 size_t GetHashCRC32(KeyType key) {
     assert(key != NULL && "Null pointer in hash function!\n");
 
-    size_t   size = strlen(key);
-    size_t crc = 0xffffffff;
+    size_t size = strlen(key);
+    size_t crc  = 0xffffffff;
 
 	while (size-- != 0) {
-        crc = crc_table[((unsigned char) crc ^ *(key++))] ^ (crc >> 8);
+        crc = (crc << 8) ^ crc32_table[((crc >> 24) ^ (size_t)*key) & 255];
+        key++;
     }
 
-    return ~crc;
+    return crc;
 }

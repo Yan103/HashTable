@@ -1,15 +1,32 @@
 #include "Tools.h"
 #include "HashFucntions.h"
+#include "TextParser.h"
 
 int main() {
-    KeyType key = "Test my hash fucntions";
 
-    printf("Len hash:        %lu\n", GetHashWordLength(key));
-    printf("Sum ASCII:       %lu\n", GetHashASCIISum(key));
-    printf("Average ASCII:   %lu\n", GetHashASCIIAverage(key));
-    printf("Polynomial hash: %lu\n", GetHashPolinomial(key));
-    printf("DJB2  hash:      %lu\n", GetHashDJB2(key));
-    printf("CRC32 hash:      %lu\n", GetHashCRC32(key));
+    HashTable* ht = HashTableCtor(TABLE_SIZE, GetHashWordLength);
+    if (ht == NULL) {
+        fprintf(stderr, RED("Error in HashTableCtor!\n"));
+        return MEMORY_ERROR;
+    }
 
-    return 0;   
+    printf("%lu\n", ht->size);
+    ParseTextFromFile("LOR.txt", ht);
+    printf("%lu\n", ht->size);
+
+    const char* s = "Lord";
+    size_t hash = ht->hash_func(s) % ht->size;
+
+    printf("%s\n", ht->table[hash]->key);
+    //printf("Searching for '%s'...\n", s);
+    //Node* find = HashTableFind(ht->table[hash], s);
+    //if (find) {
+    //    printf(GREEN("Found: %s\n"), find->key);
+    //} else {
+    //    printf(RED("Not found!\n"));
+    //}
+
+    HashTableDtor(ht);
+
+    return SUCCESS;   
 }
