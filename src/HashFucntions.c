@@ -56,7 +56,7 @@ size_t GetHashDJB2(KeyType key) {
     return hash;
 }
 
-size_t GetHashCRC32(KeyType key) {
+/*size_t GetHashCRC32(KeyType key) {
     assert(key != NULL && "Null pointer in hash function!\n");
 
     size_t size = strlen(key);
@@ -64,6 +64,24 @@ size_t GetHashCRC32(KeyType key) {
 
 	while (size-- != 0) {
         crc = (crc << 8) ^ crc32_table[((crc >> 24) ^ (size_t)*key) & 255];
+        key++;
+    }
+
+    return crc;
+}*/
+
+size_t GetHashCRC32(KeyType key) {
+    assert(key != NULL && "Null pointer in hash function!\n");
+
+    size_t size = strlen(key);
+    size_t crc  = 0xffffffff;
+    
+    for (size_t i = 0; i < size; i++) {
+        asm volatile (
+            "crc32b %1, %0"
+            : "+r"(crc)
+            : "rm"(*key)
+        );
         key++;
     }
 

@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import numpy as np
+from numpy import var
 
 def plot_hash_collisions(filename, output_image, style="ggplot"):
     hash_values = []
@@ -15,7 +15,7 @@ def plot_hash_collisions(filename, output_image, style="ggplot"):
                 hash_values.append(hash_val)
                 collisions.append(coll)
             except ValueError:
-                print(f"Error: {line_num}")
+                print(f"Ошибка в строке {line_num}: {line}")
                 continue
 
     max_hash = max(hash_values)
@@ -39,9 +39,12 @@ def plot_hash_collisions(filename, output_image, style="ggplot"):
     total_collisions = sum(collisions)
     unique_hashes = len([c for c in collisions if c > 0])
     avg_collisions = total_collisions / unique_hashes if unique_hashes > 0 else 0
+    
+    variance = var(collisions)
         
-    metrics_text = f"Всего коллизий: {total_collisions}\nУникальных хэшей: {unique_hashes}\nСреднее: {avg_collisions:.2f}"
-    ax.legend([metrics_text], loc='upper right', facecolor='white')
+    metrics_text = f"Всего коллизий: {total_collisions}\nУникальных хэшей: {unique_hashes}\nСреднее коллизий: {avg_collisions:.2f}\nДисперсия: {variance:.2f}"
+    
+    ax.legend([metrics_text], loc='upper right', facecolor='white', handlelength=0)
                 
     plt.savefig(output_image, dpi=300, bbox_inches='tight')
     print(f"Saved in: {output_image}")

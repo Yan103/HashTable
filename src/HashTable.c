@@ -1,14 +1,10 @@
 #include "HashTable.h"
 
 Node* HashTableFind(Node* head, KeyType find_key) {
-    //printf("in\n");
-    //printf("!\n");
     while (head != NULL) {
-        //printf("%s\n", head->key);
         if (strcmp(head->key, find_key) == 0) return head;
         head = head->next;
     }
-    //printf("out\n");
 
     return NULL;
 }

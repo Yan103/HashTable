@@ -1,8 +1,6 @@
 #ifndef HASHFUNCTIONS_H
 #define HASHFUNCTIONS_H
 
-#include <string.h>
-
 #include "Tools.h"
 #include "HashTable.h"
 
