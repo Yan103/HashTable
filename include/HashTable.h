@@ -4,16 +4,16 @@
 #include "Tools.h"
 #include "string.h"
 
-#define TABLE_SIZE  100009 //* it is too big!      ????
-#define LOAD_FACTOR 0.75
+const size_t TABLE_SIZE  = 100009;
+const double LOAD_FACTOR = 0.75;
 
-typedef const char* KeyType;
-typedef size_t (*HashFunction)(KeyType key);
+typedef const char KeyType;
+typedef size_t (*HashFunction)(KeyType* key);
 
 typedef struct __node {
     struct __node* next;
     struct __node* prev;
-    KeyType        key;
+    KeyType*       key;
     size_t         frequency;
 } Node;
 
@@ -24,9 +24,9 @@ typedef struct __HashTable {
     HashFunction hash_func;
 } HashTable;
 
-Node* HashTableFind(Node* head, KeyType find_key);
+Node* HashTableFind(Node* head, KeyType* find_key);
 
-ReturnCodes HashTableInsert(HashTable* ht, KeyType new_key);
+ReturnCodes HashTableInsert(HashTable* ht, KeyType* new_key);
 
 ReturnCodes HashTableResize(HashTable* ht, size_t new_capacity);
 

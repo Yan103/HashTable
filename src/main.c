@@ -3,8 +3,11 @@
 #include "TextParser.h"
 #include "Tester.h"
 
+//* valgrind --tool=callgrind ./build/hashtable 
+//* kcachegrind callgrind.out
+
 int main() {
-    HashTable* ht = HashTableCtor(TABLE_SIZE, GetHashCRC32);
+    HashTable* ht = HashTableCtor(TABLE_SIZE, GetHashASCIISum);
     if (ht == NULL) {
         fprintf(stderr, RED("Error in HashTableCtor!\n"));
         return MEMORY_ERROR;

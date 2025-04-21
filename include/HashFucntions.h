@@ -71,16 +71,16 @@ static const unsigned int crc32_table[] = {
   0xbcb4666d, 0xb8757bda, 0xb5365d03, 0xb1f740b4
 };
 
-size_t GetHashWordLength(KeyType key);
+size_t GetHashWordLength(KeyType* key);
 
-size_t GetHashASCIISum(KeyType key);
+size_t GetHashASCIISum(KeyType* key);
 
-size_t GetHashASCIIAverage(KeyType key);
+size_t GetHashASCIIAverage(KeyType* key);
 
-size_t GetHashPolinomial(KeyType key);
+size_t GetHashPolynomial(KeyType* key);
 
-size_t GetHashDJB2(KeyType key);
+size_t GetHashDJB2(KeyType* key);
 
-size_t GetHashCRC32(KeyType key);
+inline size_t GetHashCRC32(KeyType* key);
 
 #endif // HASHFUNCTIONS_H

@@ -1,6 +1,12 @@
 #include "HashTable.h"
 
-Node* HashTableFind(Node* head, KeyType find_key) {
+//* mb strlen/strcmp intrinsics ???
+//* save len(str) in struct
+//* save len(str) in first one-two bytes ? 
+
+
+
+Node* HashTableFind(Node* head, KeyType* find_key) {
     while (head != NULL) {
         if (strcmp(head->key, find_key) == 0) return head;
         head = head->next;
@@ -9,16 +15,13 @@ Node* HashTableFind(Node* head, KeyType find_key) {
     return NULL;
 }
 
-ReturnCodes HashTableInsert(HashTable* ht, KeyType new_key) {
+ReturnCodes HashTableInsert(HashTable* ht, KeyType* new_key) {
     assert(ht != NULL && "Null pointer was passed in HashTableInsert!\n");
 
     if ((double)ht->size / (double)ht->capacity >= LOAD_FACTOR) {
         fprintf(stdout, GREEN("RESIZE!\n"));
         HashTableResize(ht, ht->capacity * 2);
     }
-    //if (HashTableFind(*head, new_key) == 1) return SUCCESS;
-
-    //printf("aboba!\n");
 
     size_t hash     = ht->hash_func(new_key) % ht->capacity;
     Node*  existing = HashTableFind(ht->table[hash], new_key);
