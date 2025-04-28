@@ -1,5 +1,7 @@
 #include "TextParser.h"
 
+static const size_t MAXLEN = 256;
+
 ReturnCodes ParseTextFromFile(const char* filename, HashTable* ht) {
     assert(filename != NULL && ht != NULL && RED("Null pointer was passed!\n"));
 

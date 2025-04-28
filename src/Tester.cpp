@@ -2,6 +2,8 @@
 #include "time.h"
 #include <x86intrin.h> 
 
+static const size_t MAXLEN = 256;
+
 ReturnCodes StartTestsForHashTable(HashTable* ht, const char* input, const char* output) {
     assert(ht != NULL && input != NULL && output != NULL && RED("Null pointer was passed in StartTestsForHashTable!\n"));
 
@@ -29,7 +31,7 @@ ReturnCodes StartTestsForHashTable(HashTable* ht, const char* input, const char*
     Node* find = NULL; 
     size_t hash = 0, found = 0;
 
-    //size_t start = __rdtsc();
+    size_t start = __rdtsc();
     //clock_t s = clock();
     while (fscanf(tests, "%255s", buffer) == 1) {
         hash = ht->hash_func(buffer) % ht->capacity;
@@ -38,7 +40,7 @@ ReturnCodes StartTestsForHashTable(HashTable* ht, const char* input, const char*
         //printf("%s %c\n", buffer, find ? '+' : '-');      
     }
     printf(GREEN("Found: %lu\n"), found);
-    //printf(GREEN("Clocks: %lu\n"), __rdtsc() - start);
+    printf(GREEN("Time: %llu tacts\n"), __rdtsc() - start);
     //printf(GREEN("Clocks2: %lu\n"), (clock() - s) / CLOCKS_PER_SEC);
 
     fclose(tests);

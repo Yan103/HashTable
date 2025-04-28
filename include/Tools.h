@@ -2,9 +2,11 @@
 #define TOOLS_H
 
 #include <assert.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint-gcc.h>
 
 #define END         "\033[0;0m"                             //* Add colour outputs in my program :)
 #define RED_CLR     "\033[1;31m"

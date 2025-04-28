@@ -3,6 +3,7 @@
 
 #include "Tools.h"
 #include "HashTable.h"
+#include <nmmintrin.h>
 
 static const unsigned int crc32_table[] = {
   0x00000000, 0x04c11db7, 0x09823b6e, 0x0d4326d9,
@@ -81,6 +82,6 @@ size_t GetHashPolynomial(KeyType* key);
 
 size_t GetHashDJB2(KeyType* key);
 
-inline size_t GetHashCRC32(KeyType* key);
+size_t GetHashCRC32(KeyType* key);
 
 #endif // HASHFUNCTIONS_H

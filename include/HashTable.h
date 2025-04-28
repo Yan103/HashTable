@@ -1,6 +1,8 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 
+#include <immintrin.h>  
+
 #include "Tools.h"
 #include "string.h"
 
@@ -23,6 +25,8 @@ typedef struct __HashTable {
     size_t       capacity;
     HashFunction hash_func;
 } HashTable;
+
+int MyAsmStrCmp(KeyType* str1, KeyType* str2);
 
 Node* HashTableFind(Node* head, KeyType* find_key);
 

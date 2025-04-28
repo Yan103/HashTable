@@ -70,7 +70,7 @@ size_t GetHashDJB2(KeyType* key) {
     return crc;
 }*/
 
-inline size_t GetHashCRC32(KeyType* key) {
+size_t GetHashCRC32(KeyType* key) {
     assert(key != NULL && "Null pointer in hash function!\n");
 
     size_t size = strlen(key);

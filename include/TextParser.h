@@ -5,8 +5,6 @@
 #include "HashTable.h"
 #include "HashFucntions.h"
 
-#define MAXLEN 256
-
 ReturnCodes ParseTextFromFile(const char* filename, HashTable* ht);
 
 #endif // TEXTPARSER_H

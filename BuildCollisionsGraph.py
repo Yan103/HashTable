@@ -47,12 +47,12 @@ def plot_hash_collisions(filename, output_image, style="ggplot"):
     
     variance = var(collisions) if collisions else 0
         
-    metrics_text = f"Уникальных хэшей: {unique_hashes}\nСреднее коллизий: {avg_collisions:.2f}\nДисперсия: {variance:.2f}"
+    metrics_text = f"Уникальных хэшей: {unique_hashes}\nСреднее коллизий: {avg_collisions:.2f}\n σ: {variance:.2f}"
     
     ax.legend([metrics_text], loc='upper right', facecolor='white', handlelength=0)
                 
     plt.savefig(output_image, dpi=300, bbox_inches='tight')
     print(f"Saved in: {output_image}")
 
-plot_hash_collisions("results/WordLen.txt", output_image="WordLen.png")
+plot_hash_collisions("results/ASCIIsum.txt", output_image="ASCIIsum.png")
 

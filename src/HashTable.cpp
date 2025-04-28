@@ -1,55 +1,82 @@
 #include "HashTable.h"
 
-//* mb strlen/strcmp intrinsics ???
-//* save len(str) in struct
-//* save len(str) in first one-two bytes ? 
-
-
+const size_t LEN_ALIGNMENT = 16; 
 
 Node* HashTableFind(Node* head, KeyType* find_key) {
     while (head != NULL) {
-        if (strcmp(head->key, find_key) == 0) return head;
+        if (MyAsmStrCmp(head->key, find_key) == 0) return head;
         head = head->next;
     }
 
     return NULL;
 }
 
+int MyAsmStrCmp(const char* str1, const char* str2) {
+    assert(str1 != NULL && str2 != NULL);
+
+    size_t len1 = strlen(str1);
+    size_t len2 = strlen(str2);
+
+    if (len1 != len2) return 1;  
+
+    size_t i = 0;
+    for (; i + LEN_ALIGNMENT <= len1; i += LEN_ALIGNMENT) {
+        __m128i xmm1 = _mm_loadu_si128((__m128i*)(str1 + i));
+        __m128i xmm2 = _mm_loadu_si128((__m128i*)(str2 + i));
+        __m128i cmp  = _mm_cmpeq_epi8(xmm1, xmm2);
+
+        if (_mm_movemask_epi8(cmp) != 0xFFFF) 
+            return 1; 
+    }
+
+    //* remained bytes
+    for (; i < len1; ++i) {
+        if (str1[i] != str2[i])
+            return 1;
+    }
+
+    return 0;  
+}
+
 ReturnCodes HashTableInsert(HashTable* ht, KeyType* new_key) {
-    assert(ht != NULL && "Null pointer was passed in HashTableInsert!\n");
+    assert(ht != NULL && "Null pointer in HashTableInsert!");
 
     if ((double)ht->size / (double)ht->capacity >= LOAD_FACTOR) {
         fprintf(stdout, GREEN("RESIZE!\n"));
         HashTableResize(ht, ht->capacity * 2);
     }
 
-    size_t hash     = ht->hash_func(new_key) % ht->capacity;
-    Node*  existing = HashTableFind(ht->table[hash], new_key);
+    size_t   hash = ht->hash_func(new_key) % ht->capacity;
+    Node* current = ht->table[hash];
 
-    if (existing != NULL) {
-        existing->frequency++;
-        return SUCCESS;
-    }   
+    while (current != NULL) {
+        if (MyAsmStrCmp(current->key, new_key) == 0) {
+            current->frequency++;
+            return SUCCESS;
+        }
+        current = current->next;
+    }
 
-    char* key_copy = strdup(new_key); 
-    if (key_copy == NULL) {
+    char* key_copy = strdup(new_key);
+    if (key_copy == NULL) return MEMORY_ERROR;
+
+    Node* new_node = (Node*)aligned_alloc(LEN_ALIGNMENT, sizeof(Node)); 
+    if (new_node == NULL) {
+        FREE(key_copy);
         return MEMORY_ERROR;
     }
+    memset(new_node, 0, sizeof(Node));
 
-    Node* new_node = (Node*) calloc(1, sizeof(Node));
-    assert(new_node != NULL && "Memory error in HashTableInsert!\n");
-
-    new_node->key       = key_copy;
-    new_node->frequency = 1; 
-
+    new_node->key = key_copy;
+    new_node->frequency = 1;
     new_node->next = ht->table[hash];
-    if (ht->table[hash] != NULL) {
+    new_node->prev = NULL;
+
+    if (ht->table[hash] != NULL)
         ht->table[hash]->prev = new_node;
-    }
+
     ht->table[hash] = new_node;
     ht->size++;
-
-    //printf("aboba!\n");
 
     return SUCCESS;
 }

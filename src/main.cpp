@@ -7,7 +7,7 @@
 //* kcachegrind callgrind.out
 
 int main() {
-    HashTable* ht = HashTableCtor(TABLE_SIZE, GetHashASCIISum);
+    HashTable* ht = HashTableCtor(TABLE_SIZE, GetHashCRC32);
     if (ht == NULL) {
         fprintf(stderr, RED("Error in HashTableCtor!\n"));
         return MEMORY_ERROR;
