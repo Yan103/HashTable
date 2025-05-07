@@ -1,13 +1,13 @@
 #include "HashFucntions.h"
 
 size_t GetHashWordLength(KeyType* key) {
-    assert(key != NULL && "Null pointer in hash function!\n");
+    assert(key != NULL);
 
     return strlen((const char*)key);
 }
 
 size_t GetHashASCIISum(KeyType* key) {
-    assert(key != NULL && "Null pointer in hash function!\n");
+    assert(key != NULL);
 
     size_t len = strlen(key);
     size_t sum = 0;
@@ -20,7 +20,7 @@ size_t GetHashASCIISum(KeyType* key) {
 }
 
 size_t GetHashASCIIAverage(KeyType* key) {
-    assert(key != NULL && "Null pointer in hash function!\n");
+    assert(key != NULL);
 
     size_t len = strlen(key);
     size_t sum = 0;
@@ -33,7 +33,7 @@ size_t GetHashASCIIAverage(KeyType* key) {
 }
 
 size_t GetHashPolynomial(KeyType* key) {
-    assert(key != NULL && "Null pointer in hash function!\n");
+    assert(key != NULL);
 
     size_t hash = 0;
 
@@ -44,7 +44,7 @@ size_t GetHashPolynomial(KeyType* key) {
 }
 
 size_t GetHashDJB2(KeyType* key) {
-    assert(key != NULL && "Null pointer in hash function!\n");
+    assert(key != NULL);
 
     size_t hash = 1379; //* my default parameter
     int       c = 0;
@@ -56,8 +56,8 @@ size_t GetHashDJB2(KeyType* key) {
     return hash;
 }
 
-/*size_t GetHashCRC32(KeyType* key) {
-    assert(key != NULL && "Null pointer in hash function!\n");
+size_t GetHashCRC32Default(KeyType* key) {
+    assert(key != NULL);
 
     size_t size = strlen(key);
     size_t crc  = 0xffffffff;
@@ -68,10 +68,11 @@ size_t GetHashDJB2(KeyType* key) {
     }
 
     return crc;
-}*/
+}
 
-size_t GetHashCRC32(KeyType* key) {
-    assert(key != NULL && "Null pointer in hash function!\n");
+
+size_t GetHashCRC32Optimize(KeyType* key) {
+    assert(key != NULL);
 
     size_t size = strlen(key);
     size_t crc  = 0xffffffff;

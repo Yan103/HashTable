@@ -6,7 +6,7 @@
 #include "Tools.h"
 #include "string.h"
 
-const size_t TABLE_SIZE  = 100009;
+const size_t TABLE_SIZE  = 131072;
 const double LOAD_FACTOR = 0.75;
 
 typedef const char KeyType;

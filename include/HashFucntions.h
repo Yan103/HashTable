@@ -82,6 +82,8 @@ size_t GetHashPolynomial(KeyType* key);
 
 size_t GetHashDJB2(KeyType* key);
 
-size_t GetHashCRC32(KeyType* key);
+size_t GetHashCRC32Default(KeyType* key);
+
+size_t GetHashCRC32Optimize(KeyType* key);
 
 #endif // HASHFUNCTIONS_H

@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from numpy import var
 import os
 
-def plot_hash_collisions(filename, output_image, style="ggplot"):
+def plot_hash_collisions(filename, output_image, total_elements, style="ggplot"):
     hash_values = []
     collisions = []
     total_collisions = 0  
@@ -33,26 +33,32 @@ def plot_hash_collisions(filename, output_image, style="ggplot"):
         ax.bar(hash_values, collisions, width=1.0, color='skyblue', edgecolor='black')
     
     func_name = os.path.splitext(os.path.basename(filename))[0]
-    ax.set_title(f"Распределение коллизий хэш-функции ({func_name})", fontsize=14)
-    ax.set_xlabel("Значение хэша", fontsize=12)
-    ax.set_ylabel("Число коллизий", fontsize=12)
+    ax.set_title(f"Hash function analysis ({func_name})", fontsize=14)
+    ax.set_xlabel("Hash value", fontsize=12)
+    ax.set_ylabel("Collisions count", fontsize=12)
     ax.grid(axis='y', linestyle='--', alpha=0.7)
         
     if max_hash > 0:
         ax.set_xticks([0, max_hash])
         ax.set_xticklabels(['0', str(max_hash)])
         
-    unique_hashes = len([c for c in collisions if c > 0])
+    unique_hashes = len([c for c in collisions if c > 0])  
     avg_collisions = total_collisions / unique_hashes if unique_hashes > 0 else 0
-    
     variance = var(collisions) if collisions else 0
-        
-    metrics_text = f"Уникальных хэшей: {unique_hashes}\nСреднее коллизий: {avg_collisions:.2f}\n σ: {variance:.2f}"
+    
+    load_factor = total_elements / unique_hashes if unique_hashes > 0 else 0
+    
+    metrics_text = (
+        f"Unique hashes: {unique_hashes}\n"
+        f"Mean collisions: {avg_collisions:.2f}\n"
+        f"σ: {variance:.2f}\n"
+        f"Load-factor: {load_factor:.2f}\n"
+        f"Elements count: {total_elements}"
+    )
     
     ax.legend([metrics_text], loc='upper right', facecolor='white', handlelength=0)
                 
     plt.savefig(output_image, dpi=300, bbox_inches='tight')
     print(f"Saved in: {output_image}")
 
-plot_hash_collisions("results/ASCIIsum.txt", output_image="ASCIIsum.png")
-
+plot_hash_collisions("collisions/ASCIIaverage.txt", output_image="ASCIIaverage.png",total_elements=546711)

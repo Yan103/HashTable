@@ -1,57 +1,75 @@
 #include "Tester.h"
 #include "time.h"
-#include <x86intrin.h> 
 
-static const size_t MAXLEN = 256;
+static const size_t MAXLEN            = 256;
+static const size_t LENGTH_FIELD_SIZE = 4;
 
 ReturnCodes StartTestsForHashTable(HashTable* ht, const char* input, const char* output) {
-    assert(ht != NULL && input != NULL && output != NULL && RED("Null pointer was passed in StartTestsForHashTable!\n"));
+    assert(ht     != NULL);
+    assert(input  != NULL);
+    assert(output != NULL);
 
     FILE* tests = fopen(input, "r");
     if (tests == NULL) {
-        fprintf(stderr, RED("Error with occured the file!\n"));
+        fprintf(stderr, RED("Error opening input file!\n"));
         return FILE_ERROR;
     }
 
     FILE* answer = fopen(output, "w");
     if (answer == NULL) {
-        fprintf(stderr, RED("Error with occured the file!\n"));
+        fprintf(stderr, RED("Error opening output file!\n"));
         fclose(tests);
         return FILE_ERROR;
     }
 
-    char* buffer = (char*) calloc(MAXLEN, sizeof(char));
+    char* buffer = (char*)calloc(LENGTH_FIELD_SIZE + MAXLEN + 1, sizeof(char));
     if (buffer == NULL) {
-        fprintf(stderr, RED("Memory error in ParseTextFromFile!\n"));
+        fprintf(stderr, RED("Memory error!\n"));
         fclose(tests);
         fclose(answer);
         return MEMORY_ERROR;
     }
 
-    Node* find = NULL; 
-    size_t hash = 0, found = 0;
+    size_t total_time = 0;
+    size_t operations = 0;
+    size_t found = 0;
+    char* str_ptr = buffer + LENGTH_FIELD_SIZE;
 
-    size_t start = __rdtsc();
-    //clock_t s = clock();
-    while (fscanf(tests, "%255s", buffer) == 1) {
-        hash = ht->hash_func(buffer) % ht->capacity;
-        find = HashTableFind(ht->table[hash], buffer);
-        if (find) found++;  
-        //printf("%s %c\n", buffer, find ? '+' : '-');      
+    while (fscanf(tests, "%255s", str_ptr) == 1) {
+        char* end = str_ptr;
+        while (*end) ++end;
+        uint32_t len = (uint32_t)(end - str_ptr);
+        *((uint32_t*)buffer) = len;
+
+        size_t start   = __rdtsc();
+        size_t hash    = ht->hash_func(buffer) & (ht->capacity - 1);
+        Node* find     = HashTableFind(ht->table[hash], buffer);
+        size_t op_time = __rdtsc() - start;
+        
+        if (find) {
+            found++;
+        }
+        
+        total_time += op_time;
+        operations++;
     }
-    printf(GREEN("Found: %lu\n"), found);
-    printf(GREEN("Time: %llu tacts\n"), __rdtsc() - start);
-    //printf(GREEN("Clocks2: %lu\n"), (clock() - s) / CLOCKS_PER_SEC);
 
+    printf(GREEN("Total searches: %lu\n"), operations);
+    printf(GREEN("Found matches: %lu\n"), found);
+    printf(GREEN("Total time: %lu tacts\n"), total_time);
+    printf(GREEN("Average time per search: %.2f tacts\n"), (double)total_time / operations);
+
+    FREE(buffer);
     fclose(tests);
     fclose(answer);
-    FREE(buffer);
 
     return SUCCESS;
 }
 
+
 ReturnCodes CalcCollisionsNumber(HashTable* ht, const char* output) {
-    assert(ht != NULL && output != NULL && RED("Null pointer was passed in StartTestsForHashTable!\n"));
+    assert(ht     != NULL);
+    assert(output != NULL);
 
     FILE* answer = fopen(output, "w");
     if (answer == NULL) {
@@ -74,7 +92,6 @@ ReturnCodes CalcCollisionsNumber(HashTable* ht, const char* output) {
         fprintf(answer, "%lu %lu\n", i, collisions_per_hash);
     }
     printf(RED("%d\n"), cnt);
-
 
     fclose(answer);
 
