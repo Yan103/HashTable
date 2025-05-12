@@ -40,6 +40,7 @@ size_t GetHashPolynomial(KeyType* key) {
     for (; *key; ++key) {
         hash = hash * 31 + (unsigned char)*key;
     }
+    
     return hash;
 }
 
