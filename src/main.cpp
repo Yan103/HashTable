@@ -9,6 +9,10 @@
 //* translate ast in asm
 //* think about steck calculate
 
+//TODO what in polynomial, djb2 and crc32 ??? find error
+//TODO check after ht->size |-> 2^k normal
+//TODO base - default
+
 static const char* LORD_OF_RINGS_TEXT = "LOR_converted.txt";
 static const char* SHUFFLE_TEST       = "mixed_test.txt";
 static const char* RESULTS_FILE       = "test_results.txt";
