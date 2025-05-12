@@ -10,7 +10,7 @@ Node* HashTableFind(Node* head, KeyType* find_key) {
     }
     return NULL;
 }
-//*16 + 15 = 31
+
 int MyAsmStrCmp(KeyType* str1, KeyType* str2) {
     assert(str1 != NULL);
     assert(str2 != NULL);

@@ -1,6 +1,6 @@
 CC        = g++
 AS        = nasm
-CFLAGS    = -O3 -I$(INC_DIR)
+CFLAGS    = -O2 -I$(INC_DIR)
 ASFLAGS   = -f elf64
 SRC_DIR   = src
 INC_DIR   = include

@@ -18,7 +18,7 @@ static const char* SHUFFLE_TEST       = "mixed_test.txt";
 static const char* RESULTS_FILE       = "test_results.txt";
 
 int main() {
-    HashTable* ht = HashTableCtor(TABLE_SIZE, GetHashCRC32Default);
+    HashTable* ht = HashTableCtor(TABLE_SIZE, GetHashCRC32Optimize);
     if (ht == NULL) {
         fprintf(stderr, RED("Error in HashTableCtor!\n"));
         return MEMORY_ERROR;
