@@ -55,7 +55,6 @@ ReturnCodes StartTestsForHashTable(HashTable* ht, const char* input, const char*
     }
 
     printf(GREEN("Total searches: %lu\n"), operations);
-    printf(GREEN("Found matches: %lu\n"), found);
     printf(GREEN("Total time: %lu tacts\n"), total_time);
     printf(GREEN("Average time per search: %.2f tacts\n"), (double)total_time / operations);
 

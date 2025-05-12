@@ -70,11 +70,12 @@ size_t GetHashCRC32Default(KeyType* key) {
     return crc;
 }
 
+extern "C" size_t my_strlen(const char* str);
 
 size_t GetHashCRC32Optimize(KeyType* key) {
     assert(key != NULL);
 
-    size_t size = strlen(key);
+    size_t size = my_strlen(key);
     size_t crc  = 0xffffffff;
     
     for (size_t i = 0; i < size; i++) {

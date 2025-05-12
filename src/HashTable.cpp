@@ -1,16 +1,16 @@
 #include "HashTable.h"
 
 const        size_t LEN_ALIGNMENT     = 16; 
-static const size_t LENGTH_FIELD_SIZE = 4;
+static const size_t LENGTH_FIELD_SIZE = 2;
 
 Node* HashTableFind(Node* head, KeyType* find_key) {
     while (head != NULL) {
-        if (MyAsmStrCmp(head->key, find_key) == 0) return head;
+        if (strcmp(head->key, find_key) == 0) return head;
         head = head->next;
     }
     return NULL;
 }
-
+//*16 + 15 = 31
 int MyAsmStrCmp(KeyType* str1, KeyType* str2) {
     assert(str1 != NULL);
     assert(str2 != NULL);
@@ -29,14 +29,12 @@ int MyAsmStrCmp(KeyType* str1, KeyType* str2) {
         __m128i xmm2 = _mm_loadu_si128((__m128i*)(s2 + i));
         __m128i cmp  = _mm_cmpeq_epi8(xmm1, xmm2);
 
-        if (_mm_movemask_epi8(cmp) != 0xFFFF) 
-            return 1; 
+        if (_mm_movemask_epi8(cmp) != 0xFFFF) return 1; 
     }
 
     //* remained
     for (; i < len1; ++i) {
-        if (s1[i] != s2[i])
-            return 1;
+        if (s1[i] != s2[i]) return 1;
     }
 
     return 0;
