@@ -37,13 +37,13 @@
 
 <details>
   <summary>Посмотреть исходный код хеш-функции</summary>
-```c
-size_t GetHashWordLength(KeyType* key) {
-    assert(key != NULL);
 
-    return strlen((const char*)key);
-}
-```
+    size_t GetHashWordLength(KeyType* key) {
+        assert(key != NULL);
+    
+        return strlen((const char*)key);
+    }
+
 </details>
 
 # Сумма ASCII кодов
@@ -54,20 +54,20 @@ size_t GetHashWordLength(KeyType* key) {
 
 <details>
   <summary>Посмотреть исходный код хеш-функции</summary>
-```c
-size_t GetHashASCIISum(KeyType* key) {
-    assert(key != NULL);
+    
+    size_t GetHashASCIISum(KeyType* key) {
+        assert(key != NULL);
 
-    size_t len = strlen(key);
-    size_t sum = 0;
+        size_t len = strlen(key);
+        size_t sum = 0;
 
-    for (size_t i = 0; i < len; i++) {
-        sum += (size_t)key[i];
+        for (size_t i = 0; i < len; i++) {
+            sum += (size_t)key[i];
+        }
+
+        return sum;
     }
 
-    return sum;
-}
-```
 </details>
 
 # Среднее значение ASCII кодов
@@ -78,20 +78,20 @@ size_t GetHashASCIISum(KeyType* key) {
 
 <details>
   <summary>Посмотреть исходный код хеш-функции</summary>
-```c
-size_t GetHashASCIIAverage(KeyType* key) {
-    assert(key != NULL);
+    
+    size_t GetHashASCIIAverage(KeyType* key) {
+        assert(key != NULL);
 
-    size_t len = strlen(key);
-    size_t sum = 0;
+        size_t len = strlen(key);
+        size_t sum = 0;
 
-    for (size_t i = 0; i < len; i++) {
-        sum += (size_t)key[i];
+        for (size_t i = 0; i < len; i++) {
+            sum += (size_t)key[i];
+        }
+
+        return sum / len;
     }
 
-    return sum / len;
-}
-```
 </details>
 
 # Полиномиальное хеширование
@@ -100,13 +100,11 @@ size_t GetHashASCIIAverage(KeyType* key) {
 
 <details>
   <summary>Посмотреть исходный код хеш-функции</summary>
-    Я решил выбрать вот такой вот полином 😇
     
-```c
-for (; *key; ++key) {
-    hash = hash * 31 + (unsigned char)*key;
-}
-```
+    for (; *key; ++key) {
+        hash = hash * 31 + (unsigned char)*key;
+    }
+
 </details>
 
 <img align="center" width="600" height="360" src="img/Polynomial.png">
@@ -119,20 +117,20 @@ for (; *key; ++key) {
 
 <details>
   <summary>Посмотреть исходный код хеш-функции</summary>
-```c
-size_t GetHashDJB2(KeyType* key) {
-    assert(key != NULL);
 
-    size_t hash = 1379;
-    int       c = 0;
+    size_t GetHashDJB2(KeyType* key) {
+        assert(key != NULL);
 
-    while ((c = *key++)) {
-        hash = ((hash << 5) + hash) + (size_t)c; 
+        size_t hash = 1379;
+        int       c = 0;
+
+        while ((c = *key++)) {
+            hash = ((hash << 5) + hash) + (size_t)c; 
+        }
+
+        return hash;
     }
 
-    return hash;
-}
-```
 </details>
 
 # CRC32
@@ -143,21 +141,20 @@ size_t GetHashDJB2(KeyType* key) {
 
 <details>
   <summary>Посмотреть исходный код хеш-функции</summary>
-```c
-size_t GetHashCRC32Default(KeyType* key) {
-    assert(key != NULL);
+    
+    size_t GetHashCRC32Default(KeyType* key) {
+        assert(key != NULL);
 
-    size_t size = strlen(key);
-    size_t crc  = 0xffffffff;
+        size_t size = strlen(key);
+        size_t crc  = 0xffffffff;
 
-	while (size-- != 0) {
-        crc = (crc << 8) ^ crc32_table[((crc >> 24) ^ (size_t)*key) & 255];
-        key++;
+	    while (size-- != 0) {
+            crc = (crc << 8) ^ crc32_table[((crc >> 24) ^ (size_t)*key) & 255];
+            key++;
+        }
+
+        return crc;
     }
-
-    return crc;
-}
-```
 </details>
 
 |          Хеш-функция           | Количество уникальных хешей | Среднее число коллизий | Дисперсия |
